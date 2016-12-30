@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.settings.doze;
+package com.custom.ambient.display;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -28,7 +28,10 @@ public class ProximitySensor implements SensorEventListener {
     private static final boolean DEBUG = false;
     private static final String TAG = "ProximitySensor";
 
-    private static final int POCKET_DELTA_NS = 1000 * 1000 * 1000;
+//    private static final int POCKET_DELTA_NS = 1000 * 1000 * 1000;
+
+    private static final int HANDWAVE_MAX_DELTA_NS = 1000 * 1000 * 1000;
+    private static final int POCKET_MIN_DELTA_NS = 2000 * 1000 * 1000;
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
@@ -65,10 +68,10 @@ public class ProximitySensor implements SensorEventListener {
             return true;
         } else if (Utils.handwaveGestureEnabled(mContext)
                     && !Utils.pocketGestureEnabled(mContext)) {
-            return delta < POCKET_DELTA_NS;
+            return delta < HANDWAVE_MAX_DELTA_NS;
         } else if (!Utils.handwaveGestureEnabled(mContext)
                     && Utils.pocketGestureEnabled(mContext)) {
-            return delta >= POCKET_DELTA_NS;
+            return delta >= POCKET_MIN_DELTA_NS;
         }
         return false;
     }
